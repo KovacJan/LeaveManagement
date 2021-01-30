@@ -36,18 +36,18 @@ namespace leave_management.Repository
 
         public ICollection<LeaveAllocation> FindAll()
         {
-            return _db.LeaveAllocations.Include(_ => _.LeaveType).ToList();
+            return _db.LeaveAllocations.Include(_ => _.LeaveType).Include(_ => _.Employee).ToList();
         }
 
         public LeaveAllocation FindById(int id)
         {
-            return _db.LeaveAllocations.Find(id);
+            return _db.LeaveAllocations.Include(_ => _.LeaveType).Include(_ => _.Employee).FirstOrDefault(_ => _.Id == id);
         }
 
         public ICollection<LeaveAllocation> GetLeaveAllocationsByEmployee(string id)
         {
             var period = DateTime.Now.Year;
-            return _db.LeaveAllocations.Include(_ => _.LeaveType).Where(c => c.EmployeeId == id && c.Period == period).ToList();
+            return _db.LeaveAllocations.Include(_ => _.LeaveType).Include(_ => _.Employee).Where(c => c.EmployeeId == id && c.Period == period).ToList();
         }
 
         public bool IsExists(int id)
