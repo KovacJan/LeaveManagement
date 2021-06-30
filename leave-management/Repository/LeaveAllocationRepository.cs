@@ -44,10 +44,16 @@ namespace leave_management.Repository
             return _db.LeaveAllocations.Include(_ => _.LeaveType).Include(_ => _.Employee).FirstOrDefault(_ => _.Id == id);
         }
 
-        public ICollection<LeaveAllocation> GetLeaveAllocationsByEmployee(string id)
+        public ICollection<LeaveAllocation> GetLeaveAllocationsByEmployee(string employeeId)
         {
             var period = DateTime.Now.Year;
-            return _db.LeaveAllocations.Include(_ => _.LeaveType).Include(_ => _.Employee).Where(c => c.EmployeeId == id && c.Period == period).ToList();
+            return _db.LeaveAllocations.Include(_ => _.LeaveType).Include(_ => _.Employee).Where(c => c.EmployeeId == employeeId && c.Period == period).ToList();
+        }
+
+        public LeaveAllocation GetLeaveAllocationByEmployeeAndType(string employeeId, int leaveTypeId)
+        {
+            var period = DateTime.Now.Year;
+            return _db.LeaveAllocations.Include(_ => _.LeaveType).Include(_ => _.Employee).FirstOrDefault(c => c.EmployeeId == employeeId && c.Period == period && c.LeaveTypeId == leaveTypeId);
         }
 
         public bool IsExists(int id)
